@@ -1,0 +1,359 @@
+{
+	"info": {
+		"_postman_id": "9665b166-b0a5-4c81-8231-ea4af7aa7aa6",
+		"name": "API Automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19767608"
+	},
+	"item": [
+		{
+			"name": "Create a lead",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"//set leadId variable",
+							"let lead_id = pm.response.json();",
+							"",
+							"let sell_do_lead_id = lead_id.sell_do_lead_id;",
+							"pm.globals.set(\"lead_crm_id\", sell_do_lead_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sell_do\": {\n        \"form\": {\n            \"lead\": {\n                \"first_name\": \"{{$randomFirstName}}\",\n                \"last_name\": \"{{$randomLastName}}\",\n                \"email\": \"{{$randomEmail}}\", //Mandatory\n                \"phone\": \"{{$randomPhoneNumber}}\", //Mandatory\n                \"salutation\": \"mr\",\n                \"time_zone\": \"Asia/Calcutta\",\n                \"user_created_tags\": [\n                    \"wreer\"\n                ],\n                \"stage\": \"incoming\", //Mandatory Field\n                \"status\": \"\",\n                \"nri\": true,\n                \"project_id\": \"{{project_id}}\",\n                \"campaign_id\": \"\",\n                \"sales\": \"{{sales_id}}\",\n                \"profile\": {\n                    \"company\": \"selldo\"\n                },\n                \"received_from\": {\n                    \"campaign_id\": \"\",\n                    \"source\": null,\n                    \"sub_source\": null,\n                    \"project_id\": null\n                },\n                \"channel_partner_id\": \"\",\n                \"primary_email\": {\n                    \"email\": \"\",\n                    \"email_type\": \"office\"\n                },\n                \"primary_phone\": {\n                    \"country_code\": \"in\",\n                    \"dial_code\": \"91\",\n                    \"phone_type\": \"work\",\n                    \"ph_number\": \"\"\n                },\n                \"secondary_emails\": null,\n                \"secondary_phones\": null\n            },\n            \"note\": {\n                \"content\": \"Hello World\"\n            },\n            \"requirement\": {\n                \"bhk\": [\n                    2,\n                    3\n                ],\n                \"property_type\": \"flat\",\n                \"purpose\": \"end_use\",\n                \"locations\": \"pune\",\n                \"min_budget\": \"600000\",\n                \"max_budget\": \"700000\",\n                \"min_possession\": \"12\",\n                \"max_possession\": \"24\",\n                \"facing\": [\n                    \"South\"\n                ],\n                \"furnishing\": [\n                    \"Semi-Furnished\"\n                ],\n                \"bathrooms\": [\n                    \"2\"\n                ],\n                \"funding_source\": \"self\",\n                \"transaction_type\": \"lease\",\n                \"area\": \"112\",\n                \"addresses_fields\": [\n                    {\n                        \"address1\": \"High street\",\n                        \"address2\": \"Balwadi\",\n                        \"country\": \"India\",\n                        \"state\": \"Maharashtra\",\n                        \"city\": \"Pune\",\n                        \"address_type\": \"home-address\",\n                        \"zip\": \"441100\",\n                        \"primary\": true\n                    }\n                ]\n                // \"personal_details\": {\n                //     \"gender\": \"male\",\n                //     \"married\": true,\n                //     \"anniversary\": \"06/06/2022\",\n                //     \"age\": \"\",\n                //     \"birthday\": \"07/06/2022\",\n                //     \"industry\": \"sefs\",\n                //     \"urls\": null,\n                //     \"incomes\": null,\n                //     \"loan_details\": null,\n                //     \"educational_details\": null,\n                //     \"professional_details\": null\n                // }\n            }\n        }\n    },\n    \"api_key\": \"{{api_key}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/api/leads/create",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"api",
+						"leads",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a lead",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"//set Lead_db_id variable",
+							"let lead_id = pm.response.json();",
+							"",
+							"let lead_db_id = lead_id._id;",
+							"pm.globals.set(\"lead_db_id\", lead_db_id);",
+							"",
+							"//update lead_id",
+							"let lead_crm_id1 = pm.response.json();",
+							"",
+							"let lead_crm_id = lead_crm_id1.lead_id;",
+							"pm.globals.set(\"lead_crm_id\", lead_crm_id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"{{full_access_api_key}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"lead\": {\n        \"salutation\": \"mr\",\n        \"first_name\": \"Update\",\n        \"last_name\": \"API\",\n        \"time_zone\": \"Asia/Calcutta\",\n        \"user_created_tags\": [\n            \"\"\n        ],\n        \"stage\": \"opportunity\",\n        \"status\": \"hot\",\n        \"nri\": true,\n        \"received_from\": {\n            \"campaign_id\": \"\",\n            \"source\": \"\",\n            \"project_id\": \"\"\n        },\n        \"primary_email\": {\n            \"email\": \"{{$randomEmail}}\",\n            \"email_type\": \"office\"\n        },\n        \"primary_phone\": {\n            \"country_code\": \"in\",\n            \"dial_code\": \"91\",\n            \"phone_type\": \"work\"\n        },\n        \"secondary_emails\": [],\n        \"secondary_phones\": [],\n        \"requirement\": {\n            \"min_budget\": \"5000000\",\n            \"max_budget\": \"7000000\",\n            \"min_possession\": \"\",\n            \"max_possession\": \"\",\n            \"property_types\": [],\n            \"facing\": [],\n            \"furnishing\": [],\n            \"bathrooms\": [],\n            \"property_purpose\": [],\n            \"bhk\": [],\n            \"locations\": [],\n            \"funding_source\": \"\",\n            \"transaction_type\": \"\",\n            \"area\": \"\"\n        },\n        \"addresses_fields\": [\n            {\n                \"address1\": \"Balewadi\",\n                \"address2\": \"Highstreet\",\n                \"country\": \"India\",\n                \"state\": \"Maharashtr\",\n                \"city\": \"Pune\",\n                \"address_type\": \"home-address\",\n                \"zip\": \"441100\",\n                \"primary\": true\n            }\n        ],\n        \"lead_profile\": {\n            \"gender\": \"male\",\n            \"married\": true,\n            \"anniversary\": \"13/03/1998\",\n            \"age\": \"25\",\n            \"birthday\": \"13/03/1998\",\n            \"industry\": \"Real Estate\",\n            \"urls\": [],\n            \"incomes\": [],\n            \"loan_details\": [],\n            \"educational_details\": [],\n            \"professional_details\": []\n        },\n        \"removed_ids\": {\n            \"email\": [],\n            \"phone\": [],\n            \"address\": []\n        },\n        \"interested_project_ids\": [\n            \"\"\n        ],\n        \"sales_id\": \"{{sales_id}}\",\n        \"currently_in\": \"pre_sales\",\n        \"push_to_sales\": false,\n        \"team_id\": \"\",\n        \"custom_ddf\": \"ddf pune\",\n        \"custom_call_timing\": \"evening\",\n        \"custom_location\": \"Thailand\",\n        \"custom_test_dropdown\": [],\n        \"custom_data\": \"custom data\",\n        \"custom_lead_account_manager_name\": null,\n        \"custom_lead_category\": \"Lead category\",\n        \"custom_lead_region\": \"Pune api\",\n        \"custom_lead_client_name\": null,\n        \"custom_lead_deparment\": null,\n        \"custom_lead_department\": null,\n        \"custom_reasons_for_purchase\": null,\n        \"custom_avcd\": \"avcd\",\n        \"custom_abcd\": \"abcd\",\n        \"custom_dev\": \"dev\",\n        \"custom_other_remarks\": \"\",\n        \"custom_booked_project\": \"\",\n        \"custom_unit_number\": \"\",\n        \"custom_date_of_booking\": \"\",\n        \"custom_tvs_lead_score\": \"\",\n        \"custom_custom_location\": \"New York\",\n        \"custom_company\": \"K2V2\",\n        \"custom_designation\": \"Product Engineer-1\",\n        \"custom_probability_of_walkin\": \"Probable\",\n        \"custom_floor_plan_custom_field\": \"\",\n        \"custom_annual_income\": [\n            1000000\n        ]\n    },\n    \"project_for_sv\": [\n        \"\"\n    ],\n    \"conducted_on_for_sv\": \"2022-07-07T05:51:00.000Z\",\n    \"activities_data\": {\n        \"push_to_sales_id\": \"\"\n    }\n    // \"user_email\": \"{{user_email}}\",\n    // \"user_token\": \"{{user_token}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/client/leads/{{lead_crm_id}}.json",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"client",
+						"leads",
+						"{{lead_crm_id}}.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Followup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});",
+							"",
+							"//set Lead_db_id variable",
+							"let followupid = pm.response.json();",
+							"",
+							"let followup_id = followupid.followup._id;",
+							"pm.globals.set(\"followup_id\", followup_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"{{full_access_api_key}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"followup\": {\n        \"followup_type\": \"email\",\n        \"lead_id\": \"{{lead_db_id}}\",\n        \"scheduled_on\": \"30-09-2023 00:00 IST\", //Mandatory Field // Add suffix as IST to schedule on Exact-time\n        \"status\": \"scheduled\",\n        \"subject\": \"Update\",\n        \"agenda\": \"agenda\",\n        \"type\": \"followup\"\n    }\n    // \"user_email\": \"{{user_email}}\",\n    // \"user_token\": \"{{user_token}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/client/leads/{{lead_db_id}}/followups.json",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"client",
+						"leads",
+						"{{lead_db_id}}",
+						"followups.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update followup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"{{full_access_api_key}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"followup\": {\n        \"lead_crm_id\": \"{{lead_crm_id}}\",\n        \"agenda\": \"agenda\",\n        \"status\": \"cancelled\", // cancelled | conducted\n        \"scheduled_on\": \"30-08-2023 05:00 IST\", // required, UTC time\n        \"subject\": \"sss\",\n        \"updated_at\": \"30-08-2023 05:00 IST\",\n        \"cancellation_reason\": \"Incorrect followup date\", // Ask for list of possible reasons from Support Team\n        \"cancellation_note\": \"Twinkle twinkle little star \"\n        // \"extras\": {\n        //     \"sales_id\": {\n        //         \"id\": \"5e1c3d3a0c7392055d349fe0\",\n        //         \"text\": \"Presalesuserr1 R\"\n        //     }\n        }\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/client/leads/{{lead_crm_id}}/followups/{{followup_id}}",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"client",
+						"leads",
+						"{{lead_crm_id}}",
+						"followups",
+						"{{followup_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Site visit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//set site_visit_id variable",
+							"let site_visit = pm.response.json();",
+							"",
+							"let site_visit_id = site_visit.site_visit._id;",
+							"pm.globals.set(\"site_visit_id\", site_visit_id);",
+							"",
+							"let project_id = site_visit.site_visit.project_id;",
+							"pm.globals.set(\"project_id\", project_id);",
+							"",
+							"//--------------------",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n      \"api_key\": \"{{full_access_api_key}}\",\n      \"client_id\": \"{{client_id}}\",\n    \"site_visit\": {\n        \"project_id\": \"{{project_id}}\",\n        \"scheduled_on\": \"2022-09-29 13:00\", // UTC time\n        \"ends_on\": \"2022-09-29 14:00\", // UTC time\n        \"sales_id\": \"\",\n        \"sitevisit_type\": \"visit\", // visit | home_visit | online_walkthrough\n        \"agenda\": \"Test Agenda\",\n        \"confirmed\": true, // true | false\n        \"lead_crm_id\": \"{{lead_crm_id}}\",\n        \"Rating\": \"4\",\n        \"Test\": \"test\"\n        //\"asset_ids\":\"596754b15a9db3846f000022\"\n\n    }\n    //  \"user_email\": \"tanvi+v2@amuratech.com\",\n    //  \"user_token\": \"pzr1doiMpN8kv-2Z8kxc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/client/leads/{{lead_crm_id}}/site_visits.json",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"client",
+						"leads",
+						"{{lead_crm_id}}",
+						"site_visits.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Site Visit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_key\": \"{{full_access_api_key}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"site_visit\": {\n        \"_id\": \"{{site_visit_id}}\", //Mandatory(site_visit_id)\n        \"agenda\": \"test agenda\",\n        // \"booking_detail_id\": null,\n        // \"conducted_on\": null,\n        // \"confirmed\": true,\n        // \"created_at\": \"\",\n        // \"custom_city\": null,\n        // \"custom_no_of_people_visiting\": null,\n        // \"custom_rating\": null,\n        // \"custom_test\": null,\n        // \"ends_on\": \"\",\n        // \"external_calendar_reference\": {},\n        // \"external_participants\": [],\n        // \"gps_tracking\": {},\n        \"initiated_by\": \"\",\n        \"interested_property_id\": null,\n        \"lead_crm_id\": \"{{lead_crm_id}}\", //Mandatory\n        \"lead_id\": \"{{lead_db_id}}\", //Mandatory\n        \"notes\": null,\n        \"participants\": [],\n        \"pickup\": false,\n        \"pickup_location\": null,\n        \"pickup_time\": null,\n        \"project_id\": \"{{project_id}}\",\n        \"sales_id\": \"{{sales_id}}\",\n        \"scheduled_on\": \"2023-09-20 15:00 IST\",\n        \"sitevisit_type\": \"visit\",\n        \"status\": \"scheduled\",\n        \"team_id\": \"\",\n        \"updated_at\": \"2022-09-08\",\n        \"asset_data\": [],\n        //\"asset_ids\":\"\",\n        \"extras\": {\n            \"channel_partner\": {\n                \"id\": \"\",\n                \"text\": \"NA\"\n            },\n            \"sitevisit_type\": {\n                \"id\": \"visit\",\n                \"text\": \"Visit\"\n            },\n            \"sales_id\": {\n                \"id\": \"587ddb2b5a9db31da9000001\",\n                \"text\": \"Tanmay Ghawate\"\n            },\n            \"team_id\": {\n                \"id\": \"\",\n                \"text\": \"\"\n            }\n        },\n        \"allow_calendar_resync\": null\n    }\n    // \"user_email\": \"tanvi+v2@amuratech.com\",\n    // \"user_token\": \"CJdtWXQRRoyuGjE_a2iP\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_url}}/client/leads/x/site_visits/{{site_visit_id}}.json",
+					"host": [
+						"{{Base_url}}"
+					],
+					"path": [
+						"client",
+						"leads",
+						"x",
+						"site_visits",
+						"{{site_visit_id}}.json"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Base_url",
+			"value": "https://v2.sell.do",
+			"type": "string"
+		},
+		{
+			"key": "client_id",
+			"value": "587ddb2b5a9db31da9000002",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "fa8d6ca0217e676a7b0e06f51c32568c",
+			"type": "string"
+		},
+		{
+			"key": "full_access_api_key",
+			"value": "d2d386fbcc9805220d76fa9137519e78",
+			"type": "string"
+		},
+		{
+			"key": "sales_id",
+			"value": "587ddb2b5a9db31da9000001",
+			"type": "string"
+		},
+		{
+			"key": "project_id",
+			"value": "587dec4626300a3aca00001c",
+			"type": "string"
+		}
+	]
+}
